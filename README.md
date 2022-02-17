@@ -24,4 +24,4 @@ One possible concern with our design is if the provided Pittperson Gearmotors ca
 |  1   | Belt                  | Vex Robotics          |  $10.00   |
 
 
-![alt text](https://github.com/cclephan/PenPlotter/blob/main/ImageName.png?raw=true)
+![alt text](https://github.com/cclephan/PenPlotter/blob/main/DetailedDrawing1.jpeg?raw=true)
