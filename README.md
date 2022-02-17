@@ -22,3 +22,6 @@ One possible concern with our design is if the provided Pittperson Gearmotors ca
 |  ?   | 3D Printed Bracket    | Mustang 60            |     -     |
 |  1   | RC Hobby Wheel        | Zacsters              |   $3.00   |
 |  1   | Belt                  | Vex Robotics          |  $10.00   |
+
+
+![alt text](https://github.com/cclephan/PenPlotter/blob/main/ImageName.png?raw=true)
