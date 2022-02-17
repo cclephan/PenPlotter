@@ -2,17 +2,13 @@
 
 Description
 
-Our proposed design will utilize a radial arm rotating around a hub. The rotation
-will be carried out by a wheel at the end of the arm, driven by a Pittperson Gearmotor. The wheel
-will likely be a hobby wheel for RC cars that we will obtain from Zacsters. 
-The pen carrier will be moved radially by a belt design. The belt will be obtained from 
-Vex robotics. The belt will be driven by a Pittperson Gearmotor. The belt system will be supported by
-rails which will consist of metal tubes that we hope to find around the Aero Hanger. 
-The pen carrier will be raised and lowered using a hobby servo obtained from Zacsters. 
-It will likely be an SG90 servo. The required brackets will be 3D printed at Mustang 60, 
-which we believe is free. 
+Our proposed design will utilize a radial arm rotating around a hub. In the top right corner of the piece of paper 
+we will provide rotation to the system. The torque will be provided by a Pittperson Gearmotor. The gearmotor will provide torque to our radial arm which will consist of a rail system on which a flat bracket carrying the pen is mounted. The rail system will consist of metal tubes that we hope to find around the Aero Hanger and will be supported by 3D printed brackets. The pen carrying bracket will be moved radially by a belt. The belt will be obtained from Vex robotics and it will also be driven by a Pittperson Gearmotor. At the end of the rail system, we will mount a wheel in order to allow for free rotation of the system. The wheel will likely be a hobby wheel for RC cars that we will obtain from Zacsters. The pen carrier will be raised and lowered using an SG90 servo obtained from Zacsters. Any brackets will likely be 3D printed at Mustang 60. 
 
-The system will be mounted in the top right corner of the paper with the Pittperson Gearmotor providing rotary motion. The rails that extend past the diameter of the 6 x 4 inch paper. The wheel will be mounted at the end of the rail system in order to avoid disrupting the paper. Between the rails will be the belt which will move radially between the two rails. 
+For our rail system, we want the rails to extend past the diameter of the paper in order to prevent the wheel from disrupting or damaging the paper. The rails will provide a fixed length between the motor and the wheel while also allowing the pen to move freely back and forth. 
+
+One possible concern with our design is if the provided Pittperson Gearmotors can provide enough torque to drive the radial arm rails. Another concern of ours is implementing the rails to drive the pen radial motion as this is something we are both inexperienced with. 
+
 
 
 
@@ -25,3 +21,4 @@ The system will be mounted in the top right corner of the paper with the Pittper
 |  2   | Metal Rails           | Aero Hanger Trash     | Our pride |
 |  ?   | 3D Printed Bracket    | Mustang 60            |     -     |
 |  1   | RC Hobby Wheel        | Zacsters              |   $3.00   |
+|  1   | Belt                  | Vex Robotics          |  $10.00   |
