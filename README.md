@@ -1,5 +1,5 @@
-# PenPlotter
-
+## PenPlotter
+# Christian Clephan, Kyle McGrath
 Description
 
 Our proposed design will utilize a radial arm rotating around a hub. In the top right corner of the piece of paper will be a 3D rotating hub 
