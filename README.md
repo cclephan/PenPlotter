@@ -27,4 +27,4 @@ One possible concern with our design is if the provided Pittperson Gearmotors ca
 
 
 
-![alt text](https://github.com/cclephan/PenPlotter/blob/main/PenPlotterModel/PenPlotterV1.png?raw=true)
+![alt text](https://github.com/cclephan/PenPlotter/blob/main/PenPlotterModel/PenPlotterV1.PNG?raw=true)
