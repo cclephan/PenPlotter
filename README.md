@@ -10,7 +10,7 @@ For our rail system, we want the rails to extend past the diameter of the paper 
 One possible concern with our design is if the provided Pittperson Gearmotors can provide enough torque to drive the radial arm rails. Another concern of ours is implementing the rails to drive the pen radial motion as this is something we are both inexperienced with. 
 
 
-
+Table 1. Bill of Materials
 
 | Qty. | Part                  | Source                | Est. Cost |
 |:----:|:----------------------|:----------------------|:---------:|
@@ -29,3 +29,5 @@ One possible concern with our design is if the provided Pittperson Gearmotors ca
 
 
 ![alt text](https://github.com/cclephan/PenPlotter/blob/main/PenPlotterModel/PenPlotterV1.PNG?raw=true)
+
+Figure 1. Detailed Drawing of Pen Plotter Assembly
