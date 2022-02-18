@@ -1,4 +1,4 @@
-# PenPlotter
+# Pen Plotter Proposal
 ## Christian Clephan, Kyle McGrath
 ### Description
 
