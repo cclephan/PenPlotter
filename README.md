@@ -1,6 +1,6 @@
-## PenPlotter
-# Christian Clephan, Kyle McGrath
-Description
+# PenPlotter
+## Christian Clephan, Kyle McGrath
+### Description
 
 Our proposed design will utilize a radial arm rotating around a hub. In the top right corner of the piece of paper will be a 3D rotating hub 
 driven by a Pittperson Gearmotor. The gearmotor will provide torque to our radial arm which will consist of a rail system on which a flat bracket carrying the pen is mounted. The rail system will consist of metal tubes that we hope to find around the Aero Hanger and will be supported by 3D printed brackets (translational hub). The pen carrying bracket will be moved translationally by a belt. The belt will be obtained from McMaster-Carr and it will also be driven by a Pittperson Gearmotor. At the end of the rail system, we will mount a wheel in order to allow for free rotation of the system. At the end of the translational belt system there will be a platform to hold a gear, and on the other side a rod connecting to the free moving wheel. The wheel will likely be a hobby wheel for RC cars that we will obtain from Zacsters. The pen carrier will be raised and lowered using an SG90 servo obtained from Zacsters. All parts with complex geometry or of small size will likely be 3D printed at Mustang 60. 
