@@ -16,12 +16,15 @@ One possible concern with our design is if the provided Pittperson Gearmotors ca
 |:----:|:----------------------|:----------------------|:---------:|
 |  2   | Pittperson Gearmotors | ME405 Tub             |     -     |
 |  1   | Nucleo with Shoe      | ME405 Tub             |     -     |
-|  1   | Purple Sharpie&trade; | Office Min&trade;     |   $1.02   |
+|  1   | Purple Sharpie        | Home supply           |     -     |
 |  1   | SG90 Servo            | Zacsters              |   $1.50   |
 |  2   | Metal Rails           | Aero Hanger Trash     | Our pride |
-|  ?   | 3D Printed Bracket    | Mustang 60            |     -     |
+|  1   | 3D Printed Bracket    | Mustang 60            |     -     |
 |  1   | RC Hobby Wheel        | Zacsters              |   $3.00   |
-|  1   | Belt                  | Vex Robotics          |  $10.00   |
+|  1   | Belt                  | McMaster-Carr         |  $10.43   |
+|  1   | 3D Printed Pen Holder | Mustang 60            |     -     |
+|  1   | Rotation Hub          | Mustang 60            |     -     |
+
 
 
 ![alt text](https://github.com/cclephan/PenPlotter/blob/main/DetailedDrawing1.jpg?raw=true)
