@@ -1,10 +1,12 @@
-# -*- coding: utf-8 -*-
 """!
 @file mainpage.py
+This file contains information regarding software design
 @author Christian Clephan
 @author Kyle McGrath
 @date   09-Feb-2022
 @copyright (c) 2022 released under CalPoly
+
+@mainpage
 
 @section sftware Software Design
             This section includes information regarding our pen plottor robot
@@ -33,7 +35,7 @@
             
             \image html Processing_Task.png "Figure 3: Processing Task FSM" <br>
 
-@subection task_controller Task Controller
+@subsection task_controller Task Controller
             Task controller will wait for G-Code/HPGL drawing path to complete,
             and use path data with a proportional gain input to send PWM
             signals to respective motors. <br>
