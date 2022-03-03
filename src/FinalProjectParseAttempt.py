@@ -29,6 +29,22 @@ with open('straightline.hpgl') as file:
                 test.insert(0, theShid[0])
             commands.append(test)
         print(commands)
+        
+    for command in commands:
+        x_commands = []
+        y_commands = []
+        i = 1
+        if command[0] == "PU":
+            print("Pen Up")
+        elif command[0] == "PD":
+            print("Pen Down")
+        while i < len(command):
+            x_commands.append(command[i])
+            i = i + 1
+            y_commands.append(command[i])
+            i = i + 1 
+        
+        
         #print(currentLine)
         
     # x_variables = []
