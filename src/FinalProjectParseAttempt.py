@@ -5,6 +5,7 @@
 #code inspiration for stripping and splitting is from https://tutorial.eyehunts.com/python/how-to-remove-space-in-list-python-example-code/
 import re
 from matplotlib import pyplot as plt
+import math
 
 #Check to see if a string is a float 
 def isFloat(string):
@@ -15,8 +16,11 @@ def isFloat(string):
         return False
 
 
+L = 5 
+r = 0.375 #in
+
 #Open the csv file 
-with open('straightline.hpgl') as file:
+with open('circle.hpgl') as file:
     commands= []
     for line in file.readlines():
         currentLine = line.split(";")
@@ -29,21 +33,44 @@ with open('straightline.hpgl') as file:
                 test.insert(0, theShid[0])
             commands.append(test)
         print(commands)
+
+x_commands = []
+y_commands = []  
+theta_commands = []
+step = 1016/2
+
+for command in commands:
+    i = 1
+    
+    if command[0] == "PU":
+        print("Pen Up")
+        cur_command = 0
+    elif command[0] == "PD":
+        print("Pen Down")
+        cur_command = 1
+    while i < len(command):
+        x_var = int(command[i])/step
+        x_commands.append(x_var)
+        i = i + 1
+        y_var = int(command[i])/step
+        y_commands.append(y_var)
+        i = i + 1
+        if x_var != 0:   
+            theta1 = math.atan(y_var/x_var) / (2*math.pi)
+        else:
+            theta1 = math.pi / 2 / (2*math.pi)
+        radial = math.sqrt(x_var**2 + y_var**2)
+        theta2 = radial/(2*math.pi * r) 
+        theta_commands.append((cur_command, theta1, theta2))
+        print((theta1, theta2))
         
-    for command in commands:
-        x_commands = []
-        y_commands = []
-        i = 1
-        if command[0] == "PU":
-            print("Pen Up")
-        elif command[0] == "PD":
-            print("Pen Down")
-        while i < len(command):
-            x_commands.append(command[i])
-            i = i + 1
-            y_commands.append(command[i])
-            i = i + 1 
         
+    
+# print(x_commands)
+# print(y_commands)
+# print(theta_commands)
+
+
         
         #print(currentLine)
         
