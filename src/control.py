@@ -43,7 +43,7 @@ class ClosedLoop:
         self.motorPositions = []
         #self.t0 = utime.ticks_ms()
         
-        print("Controller Instantiated")
+        #print("Controller Instantiated")
 
     def update (self, Read, startTime):
         '''!
