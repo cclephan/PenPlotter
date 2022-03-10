@@ -1,14 +1,5 @@
 """!
 @file main.py
-Main file which runs a step response to rotate one revolution, prints values of 
-time v.s. encoder position in ticks, and resets the system to run another
-response. First, pins are created that will be used in the encoder/motor driver
-and an encoder/motor object is created. The code then goes through a loop
-asking the user for a Kp value, running the response by constantly updating
-controller calculated duty and encoder position. After 2 seconds the encoder
-is set to zero and all information collected in time/position arrays is
-displayed. The user can exit the loop by pressing control+c, which will also
-turn off the motor.
 @author Christian Clephan
 @author Kyle McGrath
 @date   02-Jan-2022
@@ -122,7 +113,7 @@ def task_servo():
     pinA7 = pyb.Pin(pyb.Pin.board.PA7,pyb.Pin.OUT_PP)
     pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
     servo = servo_driver.ServoDriver(pinA10,pinA7,3)
-    pen_is_up = False
+    pen_is_up = True
     n = 0
     while True:
         if q_servo.get() == 0 and pen_is_up == False:
@@ -139,7 +130,7 @@ def task_servo():
         yield (0)
 
 def task_data_collect():
-    with open('circle.hpgl') as file:
+    with open(file_name) as file:
         commands= []
         for line in file.readlines():
             currentLine = line.split(";")
@@ -157,7 +148,7 @@ def task_data_collect():
     x_commands = []
     y_commands = []  
     theta_commands = []
-    step = 1016
+    dpi = 1016
     for command in commands:
         i = 1
         if command[0] == "PU":
@@ -168,14 +159,14 @@ def task_data_collect():
             cur_command = 1
         while i < len(command):
             if isFloat(command[i]) == True:
-                x_var = int(command[i])/step
+                x_var = int(command[i])/dpi
                 x_commands.append(x_var)
             else:
                 x_var = 0
                 x_commands.append(x_var)
             i = i + 1
             if isFloat(command[i]) == True:
-                y_var = int(command[i])/step
+                y_var = int(command[i])/dpi
                 y_commands.append(y_var)
             else:
                 y_var = 0
@@ -204,18 +195,19 @@ if __name__ == '__main__':
                            name = "Queue Servo")
     q_stop = task_share.Queue ('h', size = 1, thread_protect = False, overwrite = False,
                            name = "Queue Stop")
+    file_name = input('Enter HPGL filename: ')
     task_data_collect()
-    print(q_theta_rad)
-    print(q_theta_rot)
-    print(q_servo)
+#     print(q_theta_rad)
+#     print(q_theta_rot)
+#     print(q_servo)
     print('Data Collection Finished')
     
     task_rot = cotask.Task (task_rot_motor, name = 'Task Rotational Motor', priority = 1, 
-                         period = 1500, profile = True, trace = False)
+                         period = 500, profile = True, trace = False)
     task_rad = cotask.Task (task_rad_motor, name = 'Task Radial Motor', priority = 1, 
-                         period = 1500, profile = True, trace = False)
+                         period = 500, profile = True, trace = False)
     task_srvo = cotask.Task (task_servo, name = 'Task Servo', priority = 0, 
-                     period = 1000, profile = True, trace = False)
+                     period = 500, profile = True, trace = False)
     
     cotask.task_list.append (task_rot)
     cotask.task_list.append (task_rad)
@@ -227,4 +219,5 @@ if __name__ == '__main__':
          cotask.task_list.pri_sched ()
      except KeyboardInterrupt:
         break
+    
     print('Program be over cuh')

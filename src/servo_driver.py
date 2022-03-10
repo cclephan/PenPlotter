@@ -20,11 +20,11 @@ class ServoDriver:
         self.pen_drawing = False
     
     def pen_down(self):
-        self.tch.pulse_width_percent(2)
+        self.tch.pulse_width_percent(5)
         self.pen_drawing = True
     
     def pen_up(self):
-        self.tch.pulse_width_percent(5)
+        self.tch.pulse_width_percent(2)
         self.pen_drawing = False
     
     
