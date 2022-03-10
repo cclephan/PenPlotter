@@ -61,12 +61,13 @@ def task_rot_motor():
                 t_cur = utime.ticks_ms()
                 duty = controller_rot.update(encoder_rot.read(), startTime)
                 motor_rot.set_duty_cycle(duty)
-            #if duty < 10:
+            if t_cur >= startTime+500:
+                startTime = t_cur
                 if q_theta_rot.any():
                     set_rot = q_theta_rot.get()-set_rot
                     new_set_rot = set_rot/100
                 print('Rotation ticks: ' + str(ticks_per_rev*new_set_rot))
-                controller_rot = control.ClosedLoop([.11,0,0], [-100,100], ticks_per_rev* new_set_rot)
+                controller_rot = control.ClosedLoop([.11,0,0], [-75,75], ticks_per_rev* new_set_rot)
             yield (0)
 
 
@@ -100,12 +101,14 @@ def task_rad_motor():
                 t_cur = utime.ticks_ms()
                 duty = controller_rad.update(encoder_rad.read(), startTime)
                 motor_rad.set_duty_cycle(duty)
-#                 if duty < 10:
+            if t_cur >= startTime+500:
+                startTime = t_cur
+                print('Changing setpoint')
                 if q_theta_rad.any():
                     set_rad = q_theta_rad.get()-set_rad
                 new_set_rad = set_rad/100
                 print('Radial ticks: ' + str(ticks_per_rev*new_set_rad))
-                controller_rad = control.ClosedLoop([.11,0,0], [-100,100], ticks_per_rev*new_set_rad)
+                controller_rad = control.ClosedLoop([.11,0,0], [-75,75], ticks_per_rev*new_set_rad)
             yield (0)
 
 
@@ -115,18 +118,21 @@ def task_servo():
     servo = servo_driver.ServoDriver(pinA10,pinA7,3)
     pen_is_up = True
     n = 0
+    heck = 0
     while True:
-        if q_servo.get() == 0 and pen_is_up == False:
-            servo.pen_up()
+        heck = q_servo.get()
+        if heck == 0 and pen_is_up == False:
+            if n > 0:
+                servo.pen_up()
             n = n+1
             pen_is_up = True
             print('goin up baby')
-        elif q_servo.get() == 1 and pen_is_up == True:
+        elif heck == 1 and pen_is_up == True:
             servo.pen_down()
             pen_is_up = False
             print('goin down baby')
-        if n > 1:
-            q_stop.put(1)
+#         if n > 1:
+#             q_stop.put(1)
         yield (0)
 
 def task_data_collect():
@@ -139,10 +145,16 @@ def task_data_collect():
                 if ("PD" in test[0] or "PU" in test[0]) and len(test[0]) > 2:
                     #theShid = re.split('(\d+)', test[0])
                     if "PD" in test[0]:
-                        test[0].replace("PD", "")
+                        #print(test[0])
+                        #print(type(test[0]))
+                        test[0] = test[0][2:]
+                        #print(test[0])
                         test.insert(0, "PD")
                     elif "PU" in test[0]:
-                        test[0].replace("PU", "")
+                        #print(test[0])
+                        #test[0].replace("PU", "")
+                        test[0] = test[0][2:]
+                        #print(test[0])
                         test.insert(0, "PU")
                 commands.append(test)
     x_commands = []
@@ -150,6 +162,7 @@ def task_data_collect():
     theta_commands = []
     dpi = 1016
     for command in commands:
+        print(command)
         i = 1
         if command[0] == "PU":
             #print("Pen Up")
@@ -197,6 +210,8 @@ if __name__ == '__main__':
                            name = "Queue Stop")
     file_name = input('Enter HPGL filename: ')
     task_data_collect()
+#     while q_theta_rad.any():
+#         print(q_theta_rad.get())
 #     print(q_theta_rad)
 #     print(q_theta_rot)
 #     print(q_servo)
@@ -214,7 +229,7 @@ if __name__ == '__main__':
     cotask.task_list.append (task_srvo)
     gc.collect ()
     
-    while q_stop.empty():
+    while q_theta_rot.any():
      try:
          cotask.task_list.pri_sched ()
      except KeyboardInterrupt:
