@@ -1,14 +1,16 @@
 # Pen Plotter
 ## Christian Clephan, Kyle McGrath
-### Introduction 
+### Introduction (both) 
 
-### Hardware Design Overview 
+### Hardware Design Overview (christian) 
 
-### Results 
+### Software Design Overiew (Kyle)
 
-### What we learned 
+### Results (both)
 
-### Additional files 
+### What we learned (both)
+
+### Additional files (CAD, view?) 
 
 
 
