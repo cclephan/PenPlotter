@@ -17,14 +17,9 @@ import servo_driver
 import task_share
 
 ticks_per_rev = 256*2*16
-r = 0.375 #in
+r = 0.375/2 #in
 
-S0_INIT = 0
-S1_PEN_UP = 1
-S2_PEN_DOWN = 2
-S3_DRAW = 3
-
-state = 3
+draw = True
 def isFloat(string):
     try: 
         float(string)
@@ -33,7 +28,7 @@ def isFloat(string):
         return False
 
 def task_rot_motor():
-    if state == S3_DRAW:
+    if draw:
         start = True
         
         pinC1 = pyb.Pin(pyb.Pin.board.PC1, pyb.Pin.OUT_PP)
@@ -44,19 +39,18 @@ def task_rot_motor():
         pinC6 = pyb.Pin(pyb.Pin.board.PC6)
         pinC7 = pyb.Pin(pyb.Pin.board.PC7)    
         encoder_rot = encoder_clephan_mcgrath.Encoder(pinC6,pinC7,8)
-        set_rot = 0
-        controller_rot = control.ClosedLoop([.15,0,0], [-100,100], ticks_per_rev* set_rot)
+        current_position = 0
+        last_position = 0 
+        controller_rot = control.ClosedLoop([.15,0,0], [-100,100], ticks_per_rev* current_position)
         while True:
 
             if start:
                 encoder_rot.zero()
 
-                #Starting time to collect data
                 startTime = utime.ticks_ms()
                 t_cur = utime.ticks_ms()
                 start = False
             else:
-                #Updates encoder position, uses that value to update duty from controller, and sleeps 10ms
                 encoder_rot.update()
                 t_cur = utime.ticks_ms()
                 duty = controller_rot.update(encoder_rot.read(), startTime)
@@ -64,15 +58,18 @@ def task_rot_motor():
             if t_cur >= startTime+500:
                 startTime = t_cur
                 if q_theta_rot.any():
-                    set_rot = q_theta_rot.get()-set_rot
-                    new_set_rot = set_rot/100
+                    last_position = current_position
+                    current_position = q_theta_rot.get()
+                    new_set_rot = current_position - last_position
+                else:
+                    motor_rot.set_duty_cycle(0)
                 print('Rotation ticks: ' + str(ticks_per_rev*new_set_rot))
-                controller_rot = control.ClosedLoop([.11,0,0], [-75,75], ticks_per_rev* new_set_rot)
+                controller_rot = control.ClosedLoop([.2,0,0], [-100,100], ticks_per_rev* new_set_rot)
             yield (0)
 
 
 def task_rad_motor():
-    if state == S3_DRAW:    
+    if draw:    
         start = True
         
         pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
@@ -84,8 +81,9 @@ def task_rad_motor():
         pinB7 = pyb.Pin(pyb.Pin.board.PB7)
         encoder_rad = encoder_clephan_mcgrath.Encoder(pinB6,pinB7,4)
         
-        set_rad = 0
-        controller_rad = control.ClosedLoop([.11,0,0], [-100,100], ticks_per_rev*set_rad)        
+        current_rad = 0 
+        last_rad = 0
+        controller_rad = control.ClosedLoop([.11,0,0], [-100,100], ticks_per_rev*current_rad)        
         while True:
 
             if start:
@@ -103,10 +101,13 @@ def task_rad_motor():
                 motor_rad.set_duty_cycle(duty)
             if t_cur >= startTime+500:
                 startTime = t_cur
-                print('Changing setpoint')
+                #print('Changing setpoint')
                 if q_theta_rad.any():
-                    set_rad = q_theta_rad.get()-set_rad
-                new_set_rad = set_rad/100
+                    last_rad = current_rad
+                    current_rad = q_theta_rad.get()
+                    new_set_rad = current_rad - last_rad
+                else:
+                    motor_rad.set_duty_cycle(0)
                 print('Radial ticks: ' + str(ticks_per_rev*new_set_rad))
                 controller_rad = control.ClosedLoop([.11,0,0], [-75,75], ticks_per_rev*new_set_rad)
             yield (0)
@@ -117,22 +118,17 @@ def task_servo():
     pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
     servo = servo_driver.ServoDriver(pinA10,pinA7,3)
     pen_is_up = True
-    n = 0
-    heck = 0
+    servo_status = 0
     while True:
-        heck = q_servo.get()
-        if heck == 0 and pen_is_up == False:
-            if n > 0:
-                servo.pen_up()
-            n = n+1
+        servo_status = q_servo.get()
+        if servo_status == 0 and pen_is_up == False:
+            servo.pen_up()
             pen_is_up = True
-            print('goin up baby')
-        elif heck == 1 and pen_is_up == True:
+            print('going up')
+        elif servo_status == 1 and pen_is_up == True:
             servo.pen_down()
             pen_is_up = False
-            print('goin down baby')
-#         if n > 1:
-#             q_stop.put(1)
+            print('going down')
         yield (0)
 
 def task_data_collect():
@@ -143,78 +139,56 @@ def task_data_collect():
             for thing in currentLine:
                 test = thing.split(',')
                 if ("PD" in test[0] or "PU" in test[0]) and len(test[0]) > 2:
-                    #theShid = re.split('(\d+)', test[0])
                     if "PD" in test[0]:
-                        #print(test[0])
-                        #print(type(test[0]))
                         test[0] = test[0][2:]
-                        #print(test[0])
                         test.insert(0, "PD")
                     elif "PU" in test[0]:
-                        #print(test[0])
-                        #test[0].replace("PU", "")
                         test[0] = test[0][2:]
-                        #print(test[0])
                         test.insert(0, "PU")
                 commands.append(test)
     x_commands = []
     y_commands = []  
     theta_commands = []
-    dpi = 1016
+    dpi = 1016*2 #steps per inch
     for command in commands:
         print(command)
         i = 1
         if command[0] == "PU":
-            #print("Pen Up")
             cur_command = 0
         elif command[0] == "PD":
-            #print("Pen Down")
             cur_command = 1
         while i < len(command):
-            if isFloat(command[i]) == True:
-                x_var = int(command[i])/dpi
-                x_commands.append(x_var)
-            else:
-                x_var = 0
-                x_commands.append(x_var)
+            x_var = float(command[i])/dpi #inch
+            x_commands.append(x_var)
             i = i + 1
-            if isFloat(command[i]) == True:
-                y_var = int(command[i])/dpi
-                y_commands.append(y_var)
-            else:
-                y_var = 0
-                y_commands.append(y_var)            
+            y_var = float(command[i])/dpi
+            y_commands.append(y_var)          
             if x_var != 0:   
                 theta1 = math.atan(y_var/x_var) / (2*math.pi)
             else:
-                theta1 = math.pi / 2 / (2*math.pi)
+                theta1 = 0
             i = i + 1
             radial = math.sqrt(x_var**2 + y_var**2)
             theta2 = radial/(2*math.pi * r)
-            theta1 = round(theta1*100)
-            theta2 = round(theta2*100)
             q_theta_rot.put(theta1)
             q_theta_rad.put(theta2)
             q_servo.put(cur_command)
-            #theta_commands.append((cur_command, theta1, theta2))    
 
 if __name__ == '__main__':
 
-    q_theta_rad = task_share.Queue ('h', size = 400, thread_protect = False, overwrite = False,
+    q_theta_rad = task_share.Queue ('f', size = 400, thread_protect = False, overwrite = False,
                            name = "Queue Theta Radial")
-    q_theta_rot = task_share.Queue ('h', size = 400, thread_protect = False, overwrite = False,
+    q_theta_rot = task_share.Queue ('f', size = 400, thread_protect = False, overwrite = False,
                            name = "Queue Theta Rotational") 
-    q_servo = task_share.Queue ('h', size = 400, thread_protect = False, overwrite = False,
+    q_servo = task_share.Queue ('f', size = 400, thread_protect = False, overwrite = False,
                            name = "Queue Servo")
-    q_stop = task_share.Queue ('h', size = 1, thread_protect = False, overwrite = False,
-                           name = "Queue Stop")
+
     file_name = input('Enter HPGL filename: ')
     task_data_collect()
 #     while q_theta_rad.any():
-#         print(q_theta_rad.get())
-#     print(q_theta_rad)
-#     print(q_theta_rot)
-#     print(q_servo)
+#         print('Radian: ' + str(q_theta_rad.get()/100))
+#         print('Rotation: ' + str(q_theta_rot.get()/100))
+
     print('Data Collection Finished')
     
     task_rot = cotask.Task (task_rot_motor, name = 'Task Rotational Motor', priority = 1, 
@@ -235,4 +209,4 @@ if __name__ == '__main__':
      except KeyboardInterrupt:
         break
     
-    print('Program be over cuh')
+    print('Program over')
