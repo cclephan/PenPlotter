@@ -1,3 +1,17 @@
+# Pen Plotter
+## Christian Clephan, Kyle McGrath
+### Introduction 
+
+### Hardware Design Overview 
+
+### Results 
+
+### What we learned 
+
+### Additional files 
+
+
+
 # Pen Plotter Proposal
 ## Christian Clephan, Kyle McGrath
 ### Description
