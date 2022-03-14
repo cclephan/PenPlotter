@@ -1,7 +1,6 @@
 # Pen Plotter
 ## Christian Clephan, Kyle McGrath
 ### Introduction (both) 
-https://cclephan.github.io/PenPlotter/
 
 Our device was a 2.5 axis pen plotter, capable of taking in HPGL files as input and drawing on a piece of paper as the output. For our device we used polar coordinates. A radial arm moving around a hub was used to create the changes in angle, and the pen was moved radially using a rail system with a belt to provide the radial motion. The remaining 0.5 axis is the moving of the pen up and down. 
 
@@ -12,6 +11,7 @@ The device was intended to be used by its two creators: Christian Clephan and Ky
 Our Pen Plotter has 3 degrees of freedom controlled by two DC motors and 1 servo motor. The servo motor controls the up and down motion of the pen by swinging in an arc downwards and perpendicular to the page, or upwards and parallel (not touching the page). One of the DC motors controls the radial motion of the pen plotter by spinning a timing belt, while housed on the rotational base. The timing belt fits around the motor gear and pulley wheel on the opposite side, which moves a carriage holding the servo motor and pen. The carriage rests on two metal rods which allow it to freely move in the radial direction. The angular direction is controlled by the other DC motor spinning the base holding the plotter. A wheel was attached to the other end of the plotter to allow for rotation as the motor spun the entire system. The spinning base, wheel, carriage, and radial motor housing were all 3D printed. Other materials such as the rods, pulley wheel, and fasteners were found in the lab scrap bin, while the timing belt was purchased from McMaster-Carr. Detailed drawings and CAD models of the hardware can be found at https://github.com/cclephan/PenPlotter/tree/main/PenPlotterModel.
 
 ### Software Design Overiew (Kyle)
+Link to Doxygen for futher software design details: https://cclephan.github.io/PenPlotter/
 
 The software consisted of utilizing several of our old files used in previous ME 405 labs as well as some new files to manage the HPGL processing. 
 
@@ -19,7 +19,7 @@ The files that were reused from previous labs were the Closed Loop Controller Fi
 
 The parsing file would open the respective HPGL file and convert the HPGL coordinates into two rotational commands that are inputted into the closed loop controller file. HPGL coordiantes were provided in X and Y coordinates, these were converted to Polar Coordiantes using Trigonometry. The radial coordinate was then converted to a second theta coordinate for the motor driving the radial motion. 
 
-The servo driver file was also new and (Christian pls help idk what else to say about it)
+The servo driver file was also new and included creating a timer, timer channel, and two functions which applied a PWM signal turning the servo motor so the pen is either up or down.
 
 Our Task Diagram for the whole system can be seen in the Doxygen page. Some of the organization for the tasks have changed since the proposal, but this was due to hardware and time limitations. 
 
