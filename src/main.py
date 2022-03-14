@@ -27,6 +27,68 @@ def isFloat(string):
     except ValueError:
         return False
 
+def task_data_collect():
+    state = 0
+    if state == S0_DATA_INIT:
+        x_commands = []
+        y_commands = []  
+        theta_commands = []
+        dpi = 1016 #steps per inch
+        state = S1_COLLECT_DATA
+    if state == S1_COLLECT_DATA:    
+        with open(file_name) as file:
+            commands= []
+            for line in file.readlines():
+                currentLine = line.split(";")
+                for thing in currentLine:
+                    test = thing.split(',')
+                    if ("PD" in test[0] or "PU" in test[0]) and len(test[0]) > 2:
+                        if "PD" in test[0]:
+                            test[0] = test[0][2:]
+                            test.insert(0, "PD")
+                        elif "PU" in test[0]:
+                            test[0] = test[0][2:]
+                            test.insert(0, "PU")
+                    commands.append(test)
+        state = S2_CONVERT_DATA
+    
+    if state == S2_CONVERT_DATA:
+        for command in commands:
+            i = 1
+            if command[0] == "PU":
+                cur_command = 0
+            elif command[0] == "PD":
+                cur_command = 1
+            while i < len(command):
+                x_var = float(command[i])/dpi #inch
+                x_commands.append(x_var)
+                i = i + 1
+                y_var = float(command[i])/dpi
+                y_commands.append(y_var)          
+                if x_var != 0:   
+                    theta1 = math.atan(y_var/x_var)# / (2*math.pi)
+                else:
+                    theta1 = 0
+                i = i + 1
+                radial = math.sqrt(x_var**2 + y_var**2)
+                theta2 = radial/(r)
+                q_theta_rot.put(theta1)
+                q_theta_rad.put(theta2)
+                q_servo.put(cur_command)
+        
+def stop_motors():
+    pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
+    pinB4 = pyb.Pin(pyb.Pin.board.PB4)
+    pinB5 = pyb.Pin(pyb.Pin.board.PB5)
+    pinC1 = pyb.Pin(pyb.Pin.board.PC1, pyb.Pin.OUT_PP)
+    pinA0 = pyb.Pin(pyb.Pin.board.PA0)
+    pinA1 = pyb.Pin(pyb.Pin.board.PA1)
+    motor_rot = motor_clephan_mcgrath.MotorDriver(pinC1, pinA0, pinA1, 5)
+    motor_rad = motor_clephan_mcgrath.MotorDriver(pinA10, pinB4, pinB5, 3)
+    
+    motor_rot.set_duty_cycle(0)
+    motor_rad.set_duty_cycle(0)
+
 def task_rot_motor():
     state = 0
     if state == S0_INIT:
@@ -143,57 +205,7 @@ def task_servo():
             servo.pen_down()
             state = S2_PEN_DOWN
         yield (0)
-
-def task_data_collect():
-    state = 0
-    if state == S0_DATA_INIT:
-        x_commands = []
-        y_commands = []  
-        theta_commands = []
-        dpi = 1016 #steps per inch
-        state = S1_COLLECT_DATA
-    if state == S1_COLLECT_DATA:    
-        with open(file_name) as file:
-            commands= []
-            for line in file.readlines():
-                currentLine = line.split(";")
-                for thing in currentLine:
-                    test = thing.split(',')
-                    if ("PD" in test[0] or "PU" in test[0]) and len(test[0]) > 2:
-                        if "PD" in test[0]:
-                            test[0] = test[0][2:]
-                            test.insert(0, "PD")
-                        elif "PU" in test[0]:
-                            test[0] = test[0][2:]
-                            test.insert(0, "PU")
-                    commands.append(test)
-        state = S2_CONVERT_DATA
     
-    if state == S2_CONVERT_DATA:
-        for command in commands:
-            i = 1
-            if command[0] == "PU":
-                cur_command = 0
-            elif command[0] == "PD":
-                cur_command = 1
-            while i < len(command):
-                x_var = float(command[i])/dpi #inch
-                x_commands.append(x_var)
-                i = i + 1
-                y_var = float(command[i])/dpi
-                y_commands.append(y_var)          
-                if x_var != 0:   
-                    theta1 = math.atan(y_var/x_var)# / (2*math.pi)
-                else:
-                    theta1 = 0
-                i = i + 1
-                radial = math.sqrt(x_var**2 + y_var**2)
-                theta2 = radial/(r)
-                q_theta_rot.put(theta1)
-                q_theta_rad.put(theta2)
-                q_servo.put(cur_command)
-        
-
 if __name__ == '__main__':
     
     #State variables for task_data_collect FSM
@@ -213,6 +225,7 @@ if __name__ == '__main__':
     S1_PEN_UP = 1
     S2_PEN_DOWN = 2
     
+    #Creating Queues
     q_theta_rad = task_share.Queue ('f', size = 400, thread_protect = False, overwrite = False,
                            name = "Queue Theta Radial")
     q_theta_rot = task_share.Queue ('f', size = 400, thread_protect = False, overwrite = False,
@@ -220,17 +233,20 @@ if __name__ == '__main__':
     q_servo = task_share.Queue ('b', size = 400, thread_protect = False, overwrite = False,
                            name = "Queue Servo")
     
+    #Asks user for HPGL File
     file_name = input('Enter HPGL filename: ')
+    
+    #Runs Data Collection task
     task_data_collect()
     print('Data Collection Finished')
     
 
-    
+    #Creating task objects
     task_rot = cotask.Task (task_rot_motor, name = 'Task Rotational Motor', priority = 1, 
                          period = 500, profile = True, trace = False)
     task_rad = cotask.Task (task_rad_motor, name = 'Task Radial Motor', priority = 1, 
                          period = 500, profile = True, trace = False)
-    task_srvo = cotask.Task (task_servo, name = 'Task Servo', priority = 1, 
+    task_srvo = cotask.Task (task_servo, name = 'Task Servo', priority = 0, 
                      period = 500, profile = True, trace = False)
     
     cotask.task_list.append (task_rot)
@@ -238,10 +254,14 @@ if __name__ == '__main__':
     cotask.task_list.append (task_srvo)
     gc.collect ()
     
+    #Running Cotask with task objects
     while q_servo.any():
      try:
          cotask.task_list.pri_sched ()
      except KeyboardInterrupt:
         break
+    
+    #Cuts off motors
+    stop_motors()
     
     print('Program over')
