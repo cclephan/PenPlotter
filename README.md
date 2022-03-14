@@ -1,3 +1,31 @@
+# Pen Plotter
+## Christian Clephan, Kyle McGrath
+### Introduction (both) 
+https://cclephan.github.io/PenPlotter/
+
+Our device was a 2.5 axis pen plotter, capable of taking in HPGL files as input and drawing on a piece of paper as the output. For our device we used polar coordinates. A radial arm moving around a hub was used to create the changes in angle, and the pen was moved radially using a rail system with a belt to provide the radial motion. The remaining 0.5 axis is the moving of the pen up and down. 
+
+The device was intended to be used by its two creators: Christian Clephan and Kyle McGrath to demonstrate their mechatronics knowledge in the Term Project. 
+
+
+### Hardware Design Overview (christian) 
+
+### Software Design Overiew (Kyle)
+
+The software consisted of utilizing several of our old files used in previous ME 405 labs as well as some new files to manage the HPGL processing. The files that were reused from previous labs were the Closed Loop Controller File, the Motor Driver File, and the Encoder Reader File. 
+
+The parsing file would open the respective HPGL file and convert the HPGL coordinates into two rotational commands that are inputted into the closed loop controller file. HPGL coordiantes were provided in X and Y coordinates, these were converted to Polar Coordiantes using Trigonometry. The radial coordinate was then converted to a second theta coordinate for the motor driving the radial motion. 
+
+The servo driver file was also new and (Christian pls help idk what else to say about it)
+
+### Results (both)
+
+### What we learned (both)
+
+### Additional files (CAD, view?) 
+
+
+
 # Pen Plotter Proposal
 ## Christian Clephan, Kyle McGrath
 ### Description
