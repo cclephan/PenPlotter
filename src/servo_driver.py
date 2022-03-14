@@ -11,8 +11,7 @@ This file contains the ServoDriver Class
 import pyb
 
 class ServoDriver:
-    #timer 3
-    #pin a7
+
     def __init__(self,en_pin,pwm_pin,timer):
         en_pin.high()
         self.t = pyb.Timer(timer, freq = 50)
