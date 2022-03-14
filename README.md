@@ -12,6 +12,12 @@ The device was intended to be used by its two creators: Christian Clephan and Ky
 
 ### Software Design Overiew (Kyle)
 
+The software consisted of utilizing several of our old files used in previous ME 405 labs as well as some new files to manage the HPGL processing. The files that were reused from previous labs were the Closed Loop Controller File, the Motor Driver File, and the Encoder Reader File. 
+
+The parsing file would open the respective HPGL file and convert the HPGL coordinates into two rotational commands that are inputted into the closed loop controller file. HPGL coordiantes were provided in X and Y coordinates, these were converted to Polar Coordiantes using Trigonometry. The radial coordinate was then converted to a second theta coordinate for the motor driving the radial motion. 
+
+The servo driver file was also new and (Christian pls help idk what else to say about it)
+
 ### Results (both)
 
 ### What we learned (both)
