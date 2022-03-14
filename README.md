@@ -30,7 +30,9 @@ Our system came close to drawing what was inputted from the HPGL file, but there
 
 We tested our system by providing HPGL inputs and printing the respective commands provided to the motors. We then performed hand calculations to confirm that the commands provided to the motors match what we wanted to do. Initially we noticed that the commands that were provided to the motors did not match the hand calculations that we performed. We believed this was due to our use of Queues as we were saving our commands as integers instead of floats. We changed this and the inputs to the motors more closely followed desired results. 
 
-Blah
+The first HPGL file that we tested with our system was a straight line that was drawn in Inkscape and exported as an HPGL. This test was eventually successful and we felt confident with moving forward with drawing two parallel lines. After taking some time to modify the speed of each motor and the period associated with each task, we eventually were able to draw two parallel lines. Some of our later tests that were unsuccessful were attempts to draw rectangles or circles. We believe our system could have failed these tests because we did not interpolate between points which could have allowed for more defined motion between the points. 
+
+
 
 
 ### What we learned (both)
