@@ -17,14 +17,11 @@ class ServoDriver:
         en_pin.high()
         self.t = pyb.Timer(timer, freq = 50)
         self.tch = self.t.channel(2,pyb.Timer.PWM, pin=pwm_pin)
-        self.pen_drawing = False
     
     def pen_down(self):
-        self.tch.pulse_width_percent(2)
-        self.pen_drawing = True
+        self.tch.pulse_width_percent(5)
     
     def pen_up(self):
-        self.tch.pulse_width_percent(5)
-        self.pen_drawing = False
-    
+        self.tch.pulse_width_percent(2)
+
     

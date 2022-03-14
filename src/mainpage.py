@@ -10,14 +10,23 @@ This file contains information regarding software design
 
 @section sftware Software Design
             This section includes information regarding our pen plottor robot
-            software design. Below is a task diagram of all information that
-            will be shared between tasks to accomplish our goal. To operate the
-            robot the user will first press a key command to start processing
-            HPGL/G-Code. Calculated pen pathing is then sent to the controller
-            task, which will send a duty cycle to motors based on a proportional
-            gain and encoder read values. <br>
+            software design. Below in Figure 1 is a task diagram of all information that
+            will be shared between tasks to accomplish our goal. To operate the robot, the user 
+            will run the main file and input an HPGL file that will be processed. The main file 
+            will then call the Processing Task which will place the current command (Pen UP or Pen Down) 
+            and the theta positions in revolutions that will be input to the radial, rotational,
+            and servo tasks. The servo task will output a 0 or a 1 to the servoDriver based on 
+            whether the Pen needs to be UP (1) or down (0). 
+            The radial and rotational tasks will output the setPoint in ticks
+            to the controller task which calls the encoder task to calculate a duty cycle 
+            based on the proportional gain and encoder read values. 
+            This duty cycle is then input into the motor driver task to drive the motor. <br>
+            \image html UpdatedTaskDiagram.png "Figure 1: Squiggly Task Diagram" <br>
             
-            \image html TaskDiagram.png "Figure 1: Pen Plotter Task Diagram" <br>
+            The previous Task Diagram could also be seen below in Figure 2. Some changes 
+            that we made are that we opted to have all the processing performed on the Nucleo, 
+            and we decided to have the User Interface built into the main file. 
+            \image html TaskDiagram.png "Figure 2: Previous Task Diagram" <br>
 
 @subsection task_UI Task User Interface
             User inteface task will wait for a user input key command, which
@@ -54,4 +63,3 @@ This file contains information regarding software design
             
             
 """
-
