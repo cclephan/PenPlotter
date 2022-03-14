@@ -2,6 +2,13 @@
 ## Christian Clephan, Kyle McGrath
 ### Introduction (both) 
 https://cclephan.github.io/PenPlotter/
+
+Our device was a 2.5 axis pen plotter, capable of taking in HPGL files as input and drawing on a piece of paper as the output. 
+
+For our device we used polar coordinates. A radial arm moving around a hub was used to create the changes in angle, and the pen was moved radially using a rail system with a belt to provide the radial motion. 
+
+
+
 ### Hardware Design Overview (christian) 
 
 ### Software Design Overiew (Kyle)
