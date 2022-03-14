@@ -26,6 +26,12 @@ Our Task Diagram for the whole system can be seen in the Doxygen page. Some of t
 
 
 ### Results (both)
+Our system came close to drawing what was inputted from the HPGL file, but there were still several shortcomings. Our most successful attempt was an attempt to draw two parallel lines, a video of which can be seen here (add this link). 
+
+We tested our system by providing HPGL inputs and printing the respective commands provided to the motors. We then performed hand calculations to confirm that the commands provided to the motors match what we wanted to do. Initially we noticed that the commands that were provided to the motors did not match the hand calculations that we performed. We believed this was due to our use of Queues as we were saving our commands as integers instead of floats. We changed this and the inputs to the motors more closely followed desired results. 
+
+Blah
+
 
 ### What we learned (both)
 
