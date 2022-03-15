@@ -1,4 +1,5 @@
 # Pen Plotter
+## Date Updated: March 15, 2022
 ## Christian Clephan, Kyle McGrath
 ### Introduction (both) 
 
@@ -40,6 +41,7 @@ The first HPGL file that we tested with our system was a straight line that was 
 
 
 # Pen Plotter Proposal
+## Date Updated: Feb 17, 2022 
 ## Christian Clephan, Kyle McGrath
 ### Description
 
