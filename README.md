@@ -36,6 +36,10 @@ The first HPGL file that we tested with our system was a straight line that was 
 
 ### What we learned (both)
 
+From this project we learned the importance of testing our code early and often. We completed the hardware portion of our project early on in the process, and we made the mistake of believing the software portion of our project wouldn't be too complicated as we planned to reuse several files from older projects. We ran into some difficulty getting all the commands from the HPGL file to read as sometimes commands would get skipped over. We eventually learned this was likely due to either calling queue.read() twice as well as a period error. There were other errors that we were unable to fix and from this we learned to not underestimate how long the software portion of a project will take. 
+
+Another thing we learned is the importance of using states in our code. We believed it would be easier to create code that works first and then implement the states after we had code that worked. In the end our code did not work as expected and we decided it was time to update the code to utilize states. We quickly saw that by using states, readability of the code improved significantly, and we were able to easily spot errors that we had missed. 
+
 ### Additional files (CAD, view?) 
 
 
