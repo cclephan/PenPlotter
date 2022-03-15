@@ -24,13 +24,25 @@
 */
 var NAVTREE =
 [
-  [ "Pen Plotter", "index.html", [
+  [ "Pen Plotter Project", "index.html", [
     [ "Software Design", "index.html#sftware", [
-      [ "Task User Interface", "index.html#task_UI", null ],
-      [ "Task Processing", "index.html#task_process", null ],
-      [ "Task Controller", "index.html#task_controller", null ],
-      [ "Task Motor", "index.html#task_motor", null ],
-      [ "Task Encoder", "index.html#task_encoder", null ]
+      [ "Processing Task", "index.html#task_process", null ],
+      [ "Rotation and Radial Task", "index.html#task_rotation_radial", null ],
+      [ "Servo Task", "index.html#task_servo", null ],
+      [ "Controller Task", "index.html#task_controller", null ],
+      [ "Motor Driver", "index.html#motor_driver", null ],
+      [ "Servo Driver", "index.html#servo_driver", null ],
+      [ "Encoder Reader", "index.html#task_encoder", null ]
+    ] ],
+    [ "Classes", "annotated.html", [
+      [ "Class List", "annotated.html", "annotated_dup" ],
+      [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ]
+      ] ]
     ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ]
@@ -40,7 +52,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"dir_70ebc2546f405441cdaaa9c546c75aa2.html"
+"annotated.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

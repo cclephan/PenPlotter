@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pen_20plotter_0',['Pen Plotter',['../index.html',1,'']]]
+  ['pen_20plotter_20project_0',['Pen Plotter Project',['../index.html',1,'']]]
 ];

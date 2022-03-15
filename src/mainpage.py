@@ -16,7 +16,7 @@ This file contains information regarding software design
             will then call the Processing Task which will place the current command (Pen Up or Pen Down) 
             and the theta positions in revolutions that will be input to the radial, rotational,
             and servo tasks. The servo task will output a 0 or a 1 to the servoDriver based on 
-            whether the Pen needs to be UP (1) or down (0). 
+            whether the Pen needs to be UP (1) or DOWN (0). 
             The radial and rotational tasks will output the setPoint in ticks
             to the controller task which calls the encoder task to calculate a duty cycle 
             based on the proportional gain and encoder read values. 
@@ -38,7 +38,7 @@ This file contains information regarding software design
             
             \image html Parse_Task.png "Figure 3: Processing Task FSM" <br>
 
-@subsection task_rotation/radial Rotation/Radial Task
+@subsection task_rotation_radial Rotation and Radial Task
             The rotation and radial tasks control the respective motor drivers, controllers, 
             and encoders related to each motor. The rotation and radial task perform 
             exactly the same so both will be described here. Once the theta 1 and theta 2
@@ -47,7 +47,7 @@ This file contains information regarding software design
             and returns a desired duty cycle to the rotation/radial task. This duty cycle 
             is then inputted into the motor driver task. <br> 
             
-            \image html Rotation_Radial_Task.png "Figure 4: Processing Task FSM" <br>
+            \image html Rotation_Radial_Task.png "Figure 4: Rotational and Radial Task FSM" <br>
             
 @subsection task_servo Servo Task
             Servo task will initiate and alternate between two states: Pen Up or 
@@ -63,11 +63,11 @@ This file contains information regarding software design
             
             \image html Controller_Task.png "Figure 6: Controller Task FSM" <br>
 
-@subsection task_motor Motor Driver
+@subsection motor_driver Motor Driver
             Task motor driver will recieve PWM duty cycles from the rotation or radial tasks
             and apply the signal to instantiated motors. <br>
             
-@subsection task_servo Servo Driver
+@subsection servo_driver Servo Driver
             Task servo driver will receive curMode commands from the servo task 
             and apply the signal to the servo. <br> 
             

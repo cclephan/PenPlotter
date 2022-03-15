@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Pen Plotter: Pen Plotter</title>
+<title>Pen Plotter Project: Pen Plotter Project</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="CPME Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Pen Plotter
+   <div id="projectname">Pen Plotter Project
    </div>
   </td>
  </tr>
@@ -83,55 +83,74 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Pen Plotter </div></div>
+  <div class="headertitle"><div class="title">Pen Plotter Project </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="sftware"></a>
 Software Design</h1>
-<p >This section includes information regarding our pen plottor robot software design. Below is a task diagram of all information that will be shared between tasks to accomplish our goal. To operate the robot the user will first press a key command to start processing HPGL/G-Code. Calculated pen pathing is then sent to the controller task, which will send a duty cycle to motors based on a proportional gain and encoder read values. <br  />
-</p>
-<div class="image">
-<img src="TaskDiagram.png" alt=""/>
+<p >This section includes information regarding our pen plottor robot software design. Below in Figure 1 is a task diagram of all information that will be shared between tasks to accomplish our goal. To operate the robot, the user will run the main file and input an HPGL file that will be processed. The main file will then call the Processing Task which will place the current command (Pen Up or Pen Down) and the theta positions in revolutions that will be input to the radial, rotational, and servo tasks. The servo task will output a 0 or a 1 to the servoDriver based on whether the Pen needs to be UP (1) or DOWN (0). The radial and rotational tasks will output the setPoint in ticks to the controller task which calls the encoder task to calculate a duty cycle based on the proportional gain and encoder read values. This duty cycle is then input into the motor driver task to drive the motor. <br  />
+ </p><div class="image">
+<img src="UpdatedTaskDiagram.png" alt=""/>
 <div class="caption">
-Figure 1: Pen Plotter Task Diagram</div></div>
+Figure 1: Squiggly Task Diagram</div></div>
 <p> <br  />
 </p>
-<h2><a class="anchor" id="task_UI"></a>
-Task User Interface</h2>
-<p >User inteface task will wait for a user input key command, which will either stop the machine, reset the pens position, or accept a drawing that is sent my the user to be drawn. <br  />
-</p>
-<div class="image">
-<img src="UI_Task.png" alt=""/>
+<p >The previous Task Diagram could also be seen below in Figure 2. Some changes that we made are that we opted to have all the processing performed on the Nucleo, and we decided to have the User Interface built into the main file. </p><div class="image">
+<img src="TaskDiagram.png" alt=""/>
 <div class="caption">
-Figure 2: User Interface Task FSM</div></div>
+Figure 2: Previous Task Diagram</div></div>
 <p> <br  />
 </p>
 <h2><a class="anchor" id="task_process"></a>
-Task Processing</h2>
-<p >Once the user has input a drawing the processing task will convert the drawing to X and Y coordinates. From those X and Y coordinates, inverse kinematics will be used to translate X/Y to R and theta motor positions. This information will be sent to controller task to send PWM to motors. <br  />
+Processing Task</h2>
+<p >Once the user has input a drawing the processing task will convert the drawing to X and Y coordinates. From those X and Y coordinates, inverse kinematics will be used to translate X/Y to theta 1 and theta 2 motor positions in revolutions. This information is then added to two different queues and sent to either the Rotation or Radial tasks. A third queue called curCommand is also filled. This queue contains bits with the command Pen up (1) or Pen down (0). The curCommand queue is sent to the servo task <br  />
 </p>
 <div class="image">
-<img src="Processing_Task.png" alt=""/>
+<img src="Parse_Task.png" alt=""/>
 <div class="caption">
 Figure 3: Processing Task FSM</div></div>
 <p> <br  />
 </p>
+<h2><a class="anchor" id="task_rotation_radial"></a>
+Rotation and Radial Task</h2>
+<p >The rotation and radial tasks control the respective motor drivers, controllers, and encoders related to each motor. The rotation and radial task perform exactly the same so both will be described here. Once the theta 1 and theta 2 positions are in their respective queues, the desired setPoint in ticks is sent to the controller task. The controller task then calls the Encoder Reader to get the current position and returns a desired duty cycle to the rotation/radial task. This duty cycle is then inputted into the motor driver task. <br  />
+</p>
+<div class="image">
+<img src="Rotation_Radial_Task.png" alt=""/>
+<div class="caption">
+Figure 4: Rotational and Radial Task FSM</div></div>
+<p> <br  />
+</p>
+<h2><a class="anchor" id="task_servo"></a>
+Servo Task</h2>
+<p >Servo task will initiate and alternate between two states: Pen Up or Pen Down depending on the desired command put in the curCommand queue. The desired mode is then sent to the servo driver. <br  />
+</p>
+<div class="image">
+<img src="Servo_Task.png" alt=""/>
+<div class="caption">
+Figure 5: Servo Task FSM</div></div>
+<p> <br  />
+</p>
 <h2><a class="anchor" id="task_controller"></a>
-Task Controller</h2>
-<p >Task controller will wait for G-Code/HPGL drawing path to complete, and use path data with a proportional gain input to send PWM signals to respective motors. <br  />
+Controller Task</h2>
+<p >Task controller will wait for a provided setPoint from the Rotation or Radial Tasks and use path data with a proportional gain input to send PWM signals to respective motors tasks. <br  />
 </p>
 <div class="image">
 <img src="Controller_Task.png" alt=""/>
 <div class="caption">
-Figure 4: Controller Task FSM</div></div>
+Figure 6: Controller Task FSM</div></div>
 <p> <br  />
 </p>
-<h2><a class="anchor" id="task_motor"></a>
-Task Motor</h2>
-<p >Task motor will recieve PWM duty cycles from the controller task and apply the signal to instantiated motors. <br  />
+<h2><a class="anchor" id="motor_driver"></a>
+Motor Driver</h2>
+<p >Task motor driver will recieve PWM duty cycles from the rotation or radial tasks and apply the signal to instantiated motors. <br  />
+</p>
+<h2><a class="anchor" id="servo_driver"></a>
+Servo Driver</h2>
+<p >Task servo driver will receive curMode commands from the servo task and apply the signal to the servo. <br  />
 </p>
 <h2><a class="anchor" id="task_encoder"></a>
-Task Encoder</h2>
+Encoder Reader</h2>
 <p >Task encoder will be the highest priority, constantly sending motor positions for radial and angular motors. Task controller will receive these values and interpret them to vary PWM for motors.<br  />
  </p>
 </div></div><!-- PageDoc -->
