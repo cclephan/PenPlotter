@@ -26,13 +26,11 @@ Our Task Diagram for the whole system can be seen in the Doxygen page. Some of t
 
 
 ### Results (both)
-Our system came close to drawing what was inputted from the HPGL file, but there were still several shortcomings. Our most successful attempt was an attempt to draw two parallel lines, a video of which can be seen here (add this link). 
+Our system came close to drawing what was inputted from the HPGL file, but there were still several shortcomings. Our most successful attempt was an attempt to draw two parallel lines, a video of which can be seen below. 
 
 We tested our system by providing HPGL inputs and printing the respective commands provided to the motors. We then performed hand calculations to confirm that the commands provided to the motors match what we wanted to do. Initially we noticed that the commands that were provided to the motors did not match the hand calculations that we performed. We believed this was due to our use of Queues as we were saving our commands as integers instead of floats. We changed this and the inputs to the motors more closely followed desired results. 
 
-The first HPGL file that we tested with our system was a straight line that was drawn in Inkscape and exported as an HPGL. This test was eventually successful and we felt confident with moving forward with drawing two parallel lines. After taking some time to modify the speed of each motor and the period associated with each task, we eventually were able to draw two parallel lines. Some of our later tests that were unsuccessful were attempts to draw rectangles or circles. We believe our system could have failed these tests because we did not interpolate between points which could have allowed for more defined motion between the points. 
-
-
+The first HPGL file that we tested with our system was a straight line that was drawn in Inkscape and exported as an HPGL. One of earlier tests with drawing a straight line can be seen here: https://youtu.be/u9vNNVAs_34. This test was eventually successful and we felt confident with moving forward with drawing two parallel lines. After taking some time to modify the speed of each motor and the period associated with each task, we eventually were able to draw two parallel lines. The video of drawing two parallel lines can be seen here: https://youtube.com/shorts/n7fFq1dV0Q4?feature=share. Some of our later tests that were unsuccessful were attempts to draw rectangles or circles. A failed rectangle attempt can be seen here: https://youtu.be/5r2_hMjXv8Q. We believe our system could have failed these tests because we did not interpolate between points which could have allowed for more defined motion between the points. 
 
 
 ### What we learned (both)
